@@ -26,7 +26,7 @@ for (const file of eventFiles) {
 
 client.on('messageCreate', async message => {
     if (!client.application?.owner) await client.application?.fetch();
-    
+
     if (message.content.toLowerCase() === '!deploy' && message.author.id === client.application?.owner.id) {
         const data = [
             {
@@ -46,6 +46,20 @@ client.on('messageCreate', async message => {
                     name: 'member',
                     type: 'MENTIONABLE',
                     description: 'The member you want to ban',
+                    required: true,
+                }, {
+                    name: 'reason',
+                    type: 'STRING',
+                    description: 'The reason for the ban'
+                }],
+            },
+            {
+                name: 'unban',
+                description: 'Unban a member',
+                options: [{
+                    name: 'id',
+                    type: 'STRING',
+                    description: 'The member you want to unban',
                     required: true,
                 }, {
                     name: 'reason',
@@ -103,40 +117,40 @@ client.on('messageCreate', async message => {
                 name: 'unlock',
                 description: 'Unlocks the channel'
             },
-            {
-                name: 'mute',
-                description: 'Mute a member',
-                options: [
-                    {
-                        name: 'member',
-                        type: 'USER',
-                        description: 'The member you want to mute',
-                        required: true,
-                    }, {
-                        name: 'time',
-                        type: 'INTEGER',
-                        description: 'The time of the mute'
-                    }, {
-                        name: 'time-type',
-                        type: 'STRING',
-                        description: 'The time type',
-                        choices: [
-                            {
-                                name: 'Seconds',
-                                value: 's',
-                            },
-                            {
-                                name: 'Minutes',
-                                value: 'm',
-                            },
-                            {
-                                name: 'Hours',
-                                value: 'h',
-                            },
-                        ],
-                    }
-                ],
-            },
+            // {
+            //     name: 'mute',
+            //     description: 'Mute a member',
+            //     options: [
+            //         {
+            //             name: 'member',
+            //             type: 'USER',
+            //             description: 'The member you want to mute',
+            //             required: true,
+            //         }, {
+            //             name: 'time',
+            //             type: 'INTEGER',
+            //             description: 'The time of the mute'
+            //         }, {
+            //             name: 'time-type',
+            //             type: 'STRING',
+            //             description: 'The time type',
+            //             choices: [
+            //                 {
+            //                     name: 'Seconds',
+            //                     value: 's',
+            //                 },
+            //                 {
+            //                     name: 'Minutes',
+            //                     value: 'm',
+            //                 },
+            //                 {
+            //                     name: 'Hours',
+            //                     value: 'h',
+            //                 },
+            //             ],
+            //         }
+            //     ],
+            // },
             {
                 name: 'warn',
                 description: 'Warn a member',
@@ -172,10 +186,6 @@ client.on('messageCreate', async message => {
                 }]
             },
             {
-                name: 'serverinfo',
-                description: 'See the info of the server'
-            },
-            {
                 name: 'softban',
                 description: 'Bans a member from the server and immeadiately unbans it',
                 options: [{
@@ -198,8 +208,97 @@ client.on('messageCreate', async message => {
                     description: 'The message',
                     required: true,
                 }]
+            },
+            {
+                name: 'timeout',
+                description: 'Give a timeout',
+                options: [{
+                    name: 'member',
+                    type: 'MENTIONABLE',
+                    description: 'The member you want to give a timeout',
+                    required: true,
+                }, {
+                    name: 'time',
+                    type: 'NUMBER',
+                    description: 'The time',
+                    required: true,
+                    choices: [
+                        {
+                            name: '60 Seconds',
+                            value: 60000,
+                        },
+                        {
+                            name: '5 Minutes',
+                            value: 300000,
+                        },
+                        {
+                            name: '10 Minutes',
+                            value: 600000,
+                        },
+                        {
+                            name: '1 Hour',
+                            value: 3600000,
+                        },
+                        {
+                            name: '1 Day',
+                            value: 86400000,
+                        },
+                        {
+                            name: '1 Week',
+                            value: 604800000,
+                        },
+                    ],
+                }, {
+                    name: 'reason',
+                    type: 'STRING',
+                    description: 'The reason for the ban'
+                },],
+            },
+            {
+                name: 'tempban',
+                description: 'Give a timeout',
+                options: [{
+                    name: 'member',
+                    type: 'MENTIONABLE',
+                    description: 'The member you want to give a timeout',
+                    required: true,
+                }, {
+                    name: 'time',
+                    type: 'NUMBER',
+                    description: 'The time',
+                    required: true,
+                    choices: [
+                        {
+                            name: '60 Seconds',
+                            value: 60000,
+                        },
+                        {
+                            name: '5 Minutes',
+                            value: 300000,
+                        },
+                        {
+                            name: '10 Minutes',
+                            value: 600000,
+                        },
+                        {
+                            name: '1 Hour',
+                            value: 3600000,
+                        },
+                        {
+                            name: '1 Day',
+                            value: 86400000,
+                        },
+                        {
+                            name: '1 Week',
+                            value: 604800000,
+                        },
+                    ],
+                }, {
+                    name: 'reason',
+                    type: 'STRING',
+                    description: 'The reason for the ban'
+                },],
             }
-
         ]
 
         const command = await client.guilds.cache.get(process.env.GUILD_ID)?.commands.set(data);

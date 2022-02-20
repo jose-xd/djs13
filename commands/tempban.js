@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const { Permissions } = require('discord.js');
 const ms = require('ms');
 
 module.exports = {
@@ -8,8 +9,7 @@ module.exports = {
     async execute(interaction, client) {
         const member = interaction.options.getMentionable("member");
         let reason = interaction.options.getString('reason');
-        let time = interaction.options.getInteger('time');
-        let timeType = interaction.options.getString('time-type');
+        let time = interaction.options.getNumber('time');
 
         if (!interaction.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
             return interaction.reply({ content: "You don't have enough permissions to run this command", ephemeral: true });
@@ -48,20 +48,20 @@ module.exports = {
                 .addField('User:', member.user.username)
                 .addField('Banned By', interaction.member.user.username)
                 .addField('Reason:', reason)
-                .setFooter('Banned At', client.user.displayAvatarURL())
+                .setFooter({ text: 'Banned At', iconURL: client.user.displayAvatarURL() })
                 .setTimestamp()
                 .setColor('#9c4c48');
 
             interaction.reply({ embeds: [banembed] });
-        }).catch(err => interaction.reply({ content: 'Something went wrong', ephemeral: true }));
+        }).catch(() => interaction.reply({ content: 'Something went wrong', ephemeral: true }));
 
         setTimeout(async function () {
             await interaction.guild.bans.fetch().then(async bans2 => {
-                if (bans2.size == 0) return message.channel.send(languageJson.tempban.nobans[result.language]);
+                if (bans2.size == 0) return;
                 let bannedUser = bans2.find(b2 => b2.user.id == member.id);
                 if (!bannedUser) return;
                 await interaction.guild.members.unban(bannedUser.user, reason).catch(err => console.log(err));
             });
-        }, ms(`${time}${timeType}`));
+        }, ms(`${time}`));
     }
 }

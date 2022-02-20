@@ -39,9 +39,9 @@ module.exports = {
             ).toLocaleDateString()} Reason: "${reason}"\n\n`
         }
 
-        fs.writeFile('warnings.txt', reply, function (err) {
+        await fs.writeFile('warnings.txt', reply, function (err) {
             if (err) throw err;
         });
-        interaction.reply({ content: reply, files: ["./warnings.txt"] }).catch(err => { interaction.reply({ content: "Something went wrong", ephemeral: true }) })
+        await interaction.reply({ content: '.', files: ["./warnings.txt"] }).catch(err => { interaction.reply({ content: "Something went wrong", ephemeral: true }) })
     }
 }

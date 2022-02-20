@@ -39,7 +39,7 @@ module.exports = {
             .addField('User:', member.user.username)
             .addField('Banned By', interaction.member.user.username)
             .addField('Reason:', reason)
-            .setFooter('Banned At', client.user.displayAvatarURL())
+            .setFooter({ text: 'Banned At', iconURL: client.user.displayAvatarURL() })
             .setTimestamp()
             .setColor('#9c4c48');
 

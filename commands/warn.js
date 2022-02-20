@@ -33,10 +33,16 @@ module.exports = {
 
         const user = member.id;
 
-        await WarnSchema.findOneAndUpdate({
+        const memberWarned = await WarnSchema.findOne({
             id: interaction.guild.id,
             user: user
-        },
+        });
+        
+        if (memberWarned && memberWarned.warnings.length > 25) {
+            return interaction.reply({ content: "That user has already 25 warnings, that's the maximum an user ", ephemeral: true });
+        }
+
+        await memberWarned.updateOne(
             {
                 id: interaction.guild.id,
                 user: user,

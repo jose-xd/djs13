@@ -25,7 +25,7 @@ module.exports = {
         const result = await WarnSchema.findOneAndDelete({
             id: interaction.guild.id,
             user: user
-        }).catch(err => { interaction.reply({ content: "Something went wrong", ephemeral: true }) });
+        }).catch(() => { interaction.reply({ content: "Something went wrong", ephemeral: true }) });
 
         if (!result) return interaction.reply({ content: "That user doesn't have warnings", ephemeral: true });
 

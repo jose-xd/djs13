@@ -2,10 +2,10 @@ const Discord = require('discord.js');
 const { Permissions } = require('discord.js');
 
 module.exports = {
-    name: 'hackban',
-    description: 'Bans a member that isn\'t a member of this server',
+    name: 'unban',
+    description: 'Unbans a member',
     async execute(interaction, client) {
-        const member = interaction.options.getString("member-id");
+        const member = interaction.options.getString("id");
         let reason = interaction.options.getString('reason');
 
         if (!interaction.member.permissions.has(Permissions.FLAGS.BAN_MEMBERS)) {
@@ -25,19 +25,19 @@ module.exports = {
         if (!reason) reason = 'Unspecified';
 
         await client.users.fetch(member).then(async user => {
-            await interaction.guild.members.ban(user.id, { reason: reason });
+            await interaction.guild.members.unban(user.id, { reason: reason });
 
-            const banembed = new Discord.MessageEmbed()
-                .setTitle('Member Banned')
+            const unbanembed = new Discord.MessageEmbed()
+                .setTitle('Member Unbanned')
                 .setThumbnail(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`)
                 .addField('User:', user.username)
-                .addField('Banned By', interaction.member.user.username)
+                .addField('Unbanned By', interaction.member.user.username)
                 .addField('Reason:', reason)
                 .setFooter({ text: 'Banned At', iconURL: client.user.displayAvatarURL() })
                 .setTimestamp()
                 .setColor('#9c4c48');
 
-            interaction.reply({ embeds: [banembed] });
+            interaction.reply({ embeds: [unbanembed] });
         }).catch(() => {
             return interaction.reply({ content: 'Couldn\'t ban that user', ephemeral: true });
         })
